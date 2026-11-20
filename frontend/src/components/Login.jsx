@@ -30,7 +30,7 @@ export default function Login({ onLogin }) {
 
   return (
     <div className="login">
-      <h1 className="brand">Blue Harbor Shop</h1>
+      <h1 className="brand">Stockline</h1>
       <p className="tag">Orders, stock and reports, powered by PostgreSQL</p>
       <form className="card" onSubmit={submit}>
         <h2>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h2>

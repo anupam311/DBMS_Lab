@@ -80,7 +80,7 @@ export default function App() {
   return (
     <>
       <header className="top">
-        <h1 className="brand">Blue Harbor Shop</h1>
+        <h1 className="brand">Stockline</h1>
         <div className="who">
           <span>{session.name}</span>
           <span className={'chip ' + session.role}>{session.role}</span>
