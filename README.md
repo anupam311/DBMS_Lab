@@ -4,6 +4,10 @@
 
 Stockline is an order, stock and reporting platform in which PostgreSQL is the system of record and the system of logic. Stock control, pricing, validation, auditing, authentication and access control are implemented inside the database as functions, procedures, triggers, views and roles. The API layer is deliberately thin: it verifies a session, assumes the caller's database role and invokes a single routine. Every client that talks to the database therefore gets the same rules, and none of them can bypass them.
 
+## Live demo
+
+https://stockline-ecommerce-management-app.onrender.com
+
 ## Contents
 
 1. [Capabilities](#capabilities)
