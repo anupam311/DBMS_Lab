@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { api, money } from '../api.js';
 
+const PAGE_SIZE = 9;
+const byName = (a, b) => a.prod_name.localeCompare(b.prod_name, undefined, { sensitivity: 'base', numeric: true });
+
 export default function Shop({ call, say }) {
   const [items, setItems] = useState(null);
   const [qty, setQty] = useState({});
+  const [page, setPage] = useState(0);
 
   useEffect(() => { call('/catalog').then(r => setItems(r.data || [])); }, []);
 
@@ -16,6 +20,12 @@ export default function Shop({ call, say }) {
   };
 
   if (!items) return <p className="note">Loading…</p>;
+
+  const sorted = [...items].sort(byName);
+  const pages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const current = Math.min(page, pages - 1);
+  const visible = sorted.slice(current * PAGE_SIZE, current * PAGE_SIZE + PAGE_SIZE);
+
   return (
     <>
       <div className="bar cart">
@@ -23,7 +33,7 @@ export default function Shop({ call, say }) {
         <button className="btn" onClick={place} disabled={!picked.length}>Place order</button>
       </div>
       <div className="grid">
-        {items.map(p => (
+        {visible.map(p => (
           <div key={p.prod_id} className={'product hue' + (p.cat_id % 5)}>
             <span className="chip-cat">{p.cat_name}</span>
             <h3>{p.prod_name}</h3>
@@ -34,6 +44,13 @@ export default function Shop({ call, say }) {
           </div>
         ))}
       </div>
+      {pages > 1 && (
+        <div className="pager">
+          <button className="btn ghost" onClick={() => setPage(current - 1)} disabled={current === 0}>Previous</button>
+          <span>Page {current + 1} of {pages}</span>
+          <button className="btn ghost" onClick={() => setPage(current + 1)} disabled={current >= pages - 1}>Next</button>
+        </div>
+      )}
     </>
   );
 }
