@@ -8,6 +8,7 @@ export default function Shop({ call, say }) {
   const [items, setItems] = useState(null);
   const [qty, setQty] = useState({});
   const [page, setPage] = useState(0);
+  const [jump, setJump] = useState('1');
 
   useEffect(() => { call('/catalog').then(r => setItems(r.data || [])); }, []);
 
@@ -25,6 +26,12 @@ export default function Shop({ call, say }) {
   const pages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   const current = Math.min(page, pages - 1);
   const visible = sorted.slice(current * PAGE_SIZE, current * PAGE_SIZE + PAGE_SIZE);
+
+  const goTo = n => {
+    const target = Math.min(Math.max(Math.round(Number(n)) || current + 1, 1), pages);
+    setPage(target - 1);
+    setJump(String(target));
+  };
 
   return (
     <>
@@ -45,11 +52,16 @@ export default function Shop({ call, say }) {
         ))}
       </div>
       {pages > 1 && (
-        <div className="pager">
-          <button className="btn ghost" onClick={() => setPage(current - 1)} disabled={current === 0}>Previous</button>
-          <span>Page {current + 1} of {pages}</span>
-          <button className="btn ghost" onClick={() => setPage(current + 1)} disabled={current >= pages - 1}>Next</button>
-        </div>
+        <form className="pager" onSubmit={e => { e.preventDefault(); goTo(jump); }}>
+          <button type="button" className="btn ghost" onClick={() => goTo(current)} disabled={current === 0}>Previous</button>
+          <label>Page
+            <input type="number" min="1" max={pages} value={jump} aria-label="Go to page"
+              onChange={e => setJump(e.target.value)} onBlur={() => goTo(jump)} />
+            of {pages}
+          </label>
+          <button type="submit" className="btn ghost">Go</button>
+          <button type="button" className="btn ghost" onClick={() => goTo(current + 2)} disabled={current >= pages - 1}>Next</button>
+        </form>
       )}
     </>
   );
