@@ -1,0 +1,22 @@
+{
+  "name": "shop-dbms-backend",
+  "version": "5.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "setup": "node database/setup.js",
+    "import:olist": "node database/import_olist.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parse": "^5.5.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "pg-copy-streams": "^6.0.6"
+  }
+}
